@@ -15,7 +15,8 @@ def get_frame_diff(pre_frame,curr_frame):
 
 cap = cv2.VideoCapture(0)
 cv2.namedWindow('trackbar')
-cv2.createTrackbar('threshold','trackbar',0,255,nothing)
+cv2.createTrackbar('min_threshold','trackbar',0,255,nothing)
+cv2.createTrackbar('max_threshold','trackbar',0,255,nothing)
 
 while True:
 
@@ -27,11 +28,13 @@ while True:
 	curr_frame = cv2.cvtColor(curr_frame,cv2.COLOR_BGR2GRAY)
 	
 	background_image = get_frame_diff(pre_frame,curr_frame)
-	val = cv2.getTrackbarPos('threshold','trackbar')
+	min = cv2.getTrackbarPos('min_threshold','trackbar')
+	max = cv2.getTrackbarPos('max_threshold','trackbar')
+
 	a = np.array([0],np.uint8)
 	b = np.array([255],np.uint8)
 
-	image = np.where(background_image>val , b ,a)
+	image = np.where((background_image>min) &(background_image<max)  , b ,a)
 
 	kernel = np.array((3,3),np.uint8)
 
