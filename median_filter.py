@@ -9,8 +9,7 @@ def nothing(x):
 cap = cv2.VideoCapture('car.avi')
 images = []
 
-cv2.namedWindow('tracker')
-cv2.createTrackbar('val','tracker',10,255,nothing)
+
 while True:
 	
 	ret,frame = cap.read()
@@ -20,7 +19,7 @@ while True:
 	frame1 = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 	        
 	images.append(frame1)
-	if len(images) ==10:
+	if len(images) ==5:
 	        images.pop(0)
 	
 
@@ -31,15 +30,15 @@ while True:
 	image = image.astype(np.uint8)
 	
 	cv2.imshow('BACKGROUND_IMAGE',image)
-	#print(image.shape)
+	
 	background_image = cv2.absdiff(frame1,image)
 
-	val =cv2.getTrackbarPos('val','tracker')
+	
 
 	a = np.array([255],np.uint8)
 	b = np.array([0],np.uint8)
 
-	forground = np.where(background_image>val,a,b)
+	forground = np.where(background_image>10,a,b)
 	
 	kernel = np.ones((3,3),np.uint8)
 	
