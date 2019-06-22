@@ -1,12 +1,11 @@
 import numpy as np
 import cv2
-import os
+
 
 def nothing(x):
 	pass
 
 
-os.chdir('/home/saurabh/project/OPENC_CV/IMAGES')
 cap = cv2.VideoCapture('car.avi')
 images = []
 
