@@ -29,7 +29,7 @@ while True:
         var = np.where(value < 2.5,new_var,var)
         a = np.uint8([255])
         b = np.uint8([0])
-        background =np.where(value < 2.5,frame_gray,mean)
+        background =np.where(value < 2.5,frame_gray,0)
         forground = np.where(value>=2.5,frame_gray,b)
         cv2.imshow('background',background)       
         kernel = np.ones((3,3),np.uint8)
