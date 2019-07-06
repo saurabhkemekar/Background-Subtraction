@@ -1,9 +1,14 @@
 import numpy as np
 import cv2
-from scipy.stats import norm
+
 # here omega indicate the weigth of particular gaussian
 # 2 is most probable and 0 is least probable
+def norm_pdf(x, mu, sigma):
 
+     pdf =  (1.0 / (sigma * ((2.0 * np.pi)**(0.5*100)) )* np.exp(-1.0 * (x - mu)**2 / (2.0 * (sigma**2))))
+    # print(pdf)
+     return pdf   
+ 
 cap = cv2.VideoCapture(0)
 _,frame = cap.read()
 frame = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
@@ -12,8 +17,10 @@ row,col = frame.shape
 frame = cv2.resize(frame,(col//2,row//2),interpolation=cv2.INTER_CUBIC)
 row = row//2
 col = col//2
+# defining the mean of three gaussian
 mean = np.zeros([3,row,col],np.float64)
 mean[1,:,:] = frame
+# similarly variance and omega
 variance = np.zeros([3,row,col],np.float64)
 variance[:,:,:] = 400
 
@@ -50,10 +57,10 @@ while cap.isOpened():
     value1 = 2.5 * sigma1
     value2 = 2.5 * sigma2
     value3 = 2.5 * sigma3
-
+# finding the background index based on weights of each gasussian
     back_index1 = np.where(omega[2]>T)
     back_index2 = np.where(((omega[2]+omega[1])>T) & (omega[2]<T))
-
+# finding the index of fiting gausssian
     gauss_fit_index1 = np.where(compare_val_1 <= value1)
     gauss_not_fit_index1 = np.where(compare_val_1 > value1)
 
@@ -65,7 +72,7 @@ while cap.isOpened():
     
     gauss_fit_index = [gauss_fit_index1,gauss_fit_index2,gauss_fit_index3]
     gauss_not_fit_index = [gauss_not_fit_index1,gauss_not_fit_index2,gauss_not_fit_index3]
-
+# introducing  temp just to find the common index of background and fiting gaussian
     temp = np.zeros([row, col])
     temp[back_index1] = 1
     temp[gauss_fit_index3] = temp[gauss_fit_index3] + 1
@@ -76,7 +83,7 @@ while cap.isOpened():
     index = np.where((compare_val_3<=value3)|(compare_val_2<=value2))
     temp[index] = temp[index]+1
     index2 = np.where(temp==2)
-
+# finding the index of those pixel which do not fit in any of the gaussian
     match_index = np.zeros([row,col])
     match_index[gauss_fit_index1] = 1
     match_index[gauss_fit_index2] = 1
