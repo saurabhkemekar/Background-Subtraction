@@ -28,7 +28,7 @@ omega = np.zeros([3,row,col],np.float64)
 omega[0,:,:],omega[1,:,:],omega[2,:,:] = 0,0,1
 
 omega_by_sigma = np.zeros([3,row,col],np.float64)
-
+# initializing the background and foreground image
 foreground = np.zeros([row,col],np.uint8)
 background = np.zeros([row,col],np.uint8)
 
